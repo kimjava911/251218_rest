@@ -1,4 +1,4 @@
-package kr.java.restapi.model.exception;
+package kr.java.restapi.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kr.java.restapi.model.dto.ErrorResponse;

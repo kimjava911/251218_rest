@@ -1,4 +1,4 @@
-package kr.java.restapi.model.exception;
+package kr.java.restapi.exception;
 
 // (3)-3
 /**
