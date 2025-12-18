@@ -15,9 +15,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/items")
 @RequiredArgsConstructor
-// #(4)-2
+// #(5)-2
 //@CrossOrigin(origins = "*")  // 모든 출처 허용 (개발용)
-// #(4)-3
+// #(5)-3
 @CrossOrigin(
         origins = {
                 "http://127.0.0.1:5500",    // Live Server
