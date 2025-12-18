@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<!-- #(4)-2 -->
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 관리</title>
+</head>
+<body>
+
+<h1>상품 관리</h1>
+<div id="message"></div>
+
+<!-- 상품 등록 폼 (CSR: fetch POST) -->
+<form id="createForm">
+    <input type="text" id="name" placeholder="상품명" required>
+    <input type="number" id="price" placeholder="가격" required min="0">
+    <input type="text" id="description" placeholder="설명">
+    <button type="submit">등록</button>
+</form>
+
+<!-- 상품 목록 (SSR: 초기 렌더링) -->
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>상품명</th>
+        <th>가격</th>
+        <th>설명</th>
+        <th>관리</th>
+    </tr>
+    </thead>
+    <tbody id="itemTableBody">
+    <!-- SSR: Thymeleaf로 초기 목록 렌더링 -->
+    <tr th:each="item : ${items}" th:id="'item-' + ${item.id}">
+        <td th:text="${item.id}">1</td>
+        <td th:text="${item.name}">상품명</td>
+        <td th:text="${#numbers.formatInteger(item.price, 0, 'COMMA')} + '원'">10,000원</td>
+        <td th:text="${item.description}">설명</td>
+        <td>
+            <button th:onclick="'deleteItem(' + ${item.id} + ')'">삭제</button>
+        </td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(items)}" id="emptyRow">
+        <td colspan="5">등록된 상품이 없습니다.</td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- JavaScript: fetch API 호출 (CSR) -->
+<script>
+    // 메시지 표시
+    function showMessage(text, isError = false) {
+        const el = document.getElementById('message');
+        el.textContent = text;
+        el.style.color = isError ? 'red' : 'green';
+        setTimeout(() => el.textContent = '', 3000);
+    }
+
+    // 상품 등록 (fetch POST)
+    document.getElementById('createForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const data = {
+            name: document.getElementById('name').value,
+            price: parseInt(document.getElementById('price').value),
+            description: document.getElementById('description').value
+        };
+
+        try {
+            const response = await fetch('/api/items', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                const item = await response.json();
+                addItemToTable(item);
+                e.target.reset();
+                showMessage('상품이 등록되었습니다.');
+            } else {
+                const error = await response.json();
+                showMessage(error.message, true);
+            }
+        } catch (err) {
+            showMessage('네트워크 오류', true);
+        }
+    });
+
+    // 상품 삭제 (fetch DELETE)
+    async function deleteItem(id) {
+        if (!confirm('삭제하시겠습니까?')) return;
+
+        try {
+            const response = await fetch(`/api/items/${id}`, { method: 'DELETE' });
+
+            if (response.status === 204) {
+                document.getElementById(`item-${id}`)?.remove();
+                showMessage('삭제되었습니다.');
+            } else {
+                const error = await response.json();
+                showMessage(error.message, true);
+            }
+        } catch (err) {
+            showMessage('네트워크 오류', true);
+        }
+    }
+
+    // 테이블에 행 추가
+    function addItemToTable(item) {
+        document.getElementById('emptyRow')?.remove();
+
+        const tr = document.createElement('tr');
+        tr.id = `item-${item.id}`;
+        tr.innerHTML = `
+        <td>${item.id}</td>
+        <td>${item.name}</td>
+        <td>${item.price.toLocaleString()}원</td>
+        <td>${item.description || ''}</td>
+        <td><button onclick="deleteItem(${item.id})">삭제</button></td>
+    `;
+        document.getElementById('itemTableBody').appendChild(tr);
+    }
+</script>
+
+</body>
+</html>
