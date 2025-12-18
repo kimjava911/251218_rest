@@ -4,7 +4,7 @@ import kr.java.restapi.model.dto.ItemCreateRequest;
 import kr.java.restapi.model.dto.ItemResponse;
 import kr.java.restapi.model.dto.ItemUpdateRequest;
 import kr.java.restapi.model.entity.Item;
-import kr.java.restapi.model.exception.NotFoundException;
+import kr.java.restapi.exception.NotFoundException;
 import kr.java.restapi.model.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
