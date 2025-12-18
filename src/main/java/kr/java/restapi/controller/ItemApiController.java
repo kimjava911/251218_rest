@@ -12,25 +12,31 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-// #(1)
-/**
- * 상품 REST API 컨트롤러
- *
- * URL 설계:
- * - POST   /api/items          : 생성
- * - GET    /api/items/{id}     : 단건 조회
- * - GET    /api/items          : 목록 조회
- * - PUT    /api/items/{id}     : 수정
- * - DELETE /api/items/{id}     : 삭제
- */
 @RestController
 @RequestMapping("/api/items")
 @RequiredArgsConstructor
+// #(4)-2
+//@CrossOrigin(origins = "*")  // 모든 출처 허용 (개발용)
+// #(4)-3
+@CrossOrigin(
+        origins = {
+                "http://127.0.0.1:5500",    // Live Server
+                "http://localhost:5500",    // Live Server (localhost)
+                "http://localhost:3000"     // React 개발 서버
+        },
+        methods = {
+                RequestMethod.GET,
+                RequestMethod.POST,
+                RequestMethod.PUT,
+                RequestMethod.DELETE
+        },
+        allowedHeaders = "*",
+        maxAge = 3600
+)
 public class ItemApiController {
 
     private final ItemService itemService;
 
-    // CREATE: POST /api/items → 201 Created
     @PostMapping
     public ResponseEntity<ItemResponse> create(
             @Valid @RequestBody ItemCreateRequest request) {

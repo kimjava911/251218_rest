@@ -120,7 +120,7 @@ public class FileService {
 
     public FileEntity findById(Long id) {
         return fileRepository.findById(id)
-                // #(5)-9
+                // #(3)-6-4
 //                .orElseThrow(() -> new NoSuchElementException("파일이 존재하지 않습니다: " + id));
                 .orElseThrow(() -> new NotFoundException("파일이 존재하지 않습니다: " + id));
     }
@@ -134,13 +134,13 @@ public class FileService {
     // 파일 검증
     private void validateFile(MultipartFile file) {
         if (file.isEmpty()) {
-            // #(3)-6-4
+            // #(3)-6-5
 //            throw new IllegalArgumentException("파일이 비어있습니다.");
             throw new BadRequestException("파일이 비어있습니다.");
         }
         String contentType = file.getContentType();
         if (contentType == null || !ALLOWED_TYPES.contains(contentType)) {
-            // #(3)-6-5
+            // #(3)-6-6
 //            throw new IllegalArgumentException("허용되지 않는 파일 형식입니다.");
             throw new BadRequestException("허용되지 않는 파일 형식입니다.");
         }
