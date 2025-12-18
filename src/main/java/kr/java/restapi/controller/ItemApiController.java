@@ -18,21 +18,21 @@ import java.util.List;
 // #(5)-2
 //@CrossOrigin(origins = "*")  // 모든 출처 허용 (개발용)
 // #(5)-3
-@CrossOrigin(
-        origins = {
-                "http://127.0.0.1:5500",    // Live Server
-                "http://localhost:5500",    // Live Server (localhost)
-                "http://localhost:3000"     // React 개발 서버
-        },
-        methods = {
-                RequestMethod.GET,
-                RequestMethod.POST,
-                RequestMethod.PUT,
-                RequestMethod.DELETE
-        },
-        allowedHeaders = "*",
-        maxAge = 3600
-)
+//@CrossOrigin(
+//        origins = {
+//                "http://127.0.0.1:5500",    // Live Server
+//                "http://localhost:5500",    // Live Server (localhost)
+//                "http://localhost:3000"     // React 개발 서버
+//        },
+//        methods = {
+//                RequestMethod.GET,
+//                RequestMethod.POST,
+//                RequestMethod.PUT,
+//                RequestMethod.DELETE
+//        },
+//        allowedHeaders = "*",
+//        maxAge = 3600
+//)
 public class ItemApiController {
 
     private final ItemService itemService;
